@@ -6,3 +6,4 @@ ng new trustbuster --prefix=tb --routing --strict --view-encapsulation=ShadowDom
 
 ng add @angular/pwa
 
+ng add @angular/material
