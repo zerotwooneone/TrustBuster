@@ -1,0 +1,9 @@
+:host {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  .container {
+    max-width: 95%;
+    max-height: 95%;
+  }
+}

@@ -8,12 +8,14 @@ import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BoardComponent } from './board/board.component';
 import { BoardSpotComponent } from './board-spot/board-spot.component';
+import { GameComponent } from './game/game.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     BoardComponent,
-    BoardSpotComponent
+    BoardSpotComponent,
+    GameComponent
   ],
   imports: [
     BrowserModule,
