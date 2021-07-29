@@ -15,3 +15,5 @@ ng generate component board --display-block
 ng generate component boardSpot --display-block
 ng generate component game --display-block
 ng generate class \board\boardState
+ng g class \board-spot\spotState
+ng g class \player\playerState

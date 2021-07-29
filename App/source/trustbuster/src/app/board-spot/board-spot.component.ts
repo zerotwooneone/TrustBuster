@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { SpotState } from './spot-state';
 
 @Component({
   selector: 'tb-board-spot',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./board-spot.component.scss']
 })
 export class BoardSpotComponent implements OnInit {
+
+  @Input() spot: SpotState = null as any;
 
   constructor() { }
 

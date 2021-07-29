@@ -25,7 +25,7 @@ export class BoardComponent implements OnInit {
 
     this.rows = `repeat(${this.state.rowCount}, var(--grid-row-height, 0))`;
 
-    this.spots = Array.from(Array(this.state.rowCount * this.state.columnCount).keys());
+    this.spots = this.state.spots;
   }
 
 }
