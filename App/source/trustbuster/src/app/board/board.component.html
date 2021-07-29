@@ -1,2 +1,3 @@
-<tb-board-spot *ngFor="let spot of spots; let i = index;" [spot]="spot"></tb-board-spot>
+<tb-board-spot *ngFor="let spot of spots; let i = index;" [spot]="spot" cdkDropList (cdkDropListDropped)="drop($event)"
+    [cdkDropListData]="spot" (cdkDropListEntered)="enter($event)"></tb-board-spot>
 

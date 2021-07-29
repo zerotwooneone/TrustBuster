@@ -1,4 +1,6 @@
+import { CdkDragDrop, CdkDragEnter, CdkDragSortEvent } from '@angular/cdk/drag-drop';
 import { Component, HostBinding, Input, OnInit } from '@angular/core';
+import { SpotState } from '../board-spot/spot-state';
 import { BoardState } from './board-state';
 
 @Component({
@@ -14,7 +16,7 @@ export class BoardComponent implements OnInit {
 
   @Input() state: BoardState = null as any;
 
-  public spots: any[] = [];
+  public spots: SpotState[] = [];
 
   constructor() {
 
@@ -26,6 +28,15 @@ export class BoardComponent implements OnInit {
     this.rows = `repeat(${this.state.rowCount}, var(--grid-row-height, 0))`;
 
     this.spots = this.state.spots;
+  }
+
+  drop(event: CdkDragDrop<SpotState>) {
+    console.log(event);
+  }
+
+  enter(event: CdkDragEnter<SpotState>) {
+    console.log(`moving from:${event.item?.dropContainer?.data?.rowIndex},${event.item?.dropContainer?.data?.columnIndex} to:${event.container?.data?.rowIndex},${event.container?.data?.columnIndex}`);
+    console.warn(event);
   }
 
 }

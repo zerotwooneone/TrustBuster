@@ -21,7 +21,6 @@ export class BoardState {
 
             const hp = 1 + Math.floor(Math.random() * 2);
 
-            console.warn(Math.floor((Math.random() * this.rowCount * this.columnCount) * 2))
             const player = Math.floor((Math.random() * this.rowCount * this.columnCount)) < 2
                 ? new PlayerState(playerId, ap, hp)
                 : null;

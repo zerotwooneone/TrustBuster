@@ -12,6 +12,7 @@ import { GameComponent } from './game/game.component';
 import { PlayerComponent } from './player/player.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatBadgeModule } from '@angular/material/badge';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { MatBadgeModule } from '@angular/material/badge';
     BrowserAnimationsModule,
     MatIconModule,
     MatBadgeModule,
+    DragDropModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,3 +1,4 @@
+import { CdkDragEnter } from '@angular/cdk/drag-drop';
 import { Component, Input, OnInit } from '@angular/core';
 import { SpotState } from './spot-state';
 
