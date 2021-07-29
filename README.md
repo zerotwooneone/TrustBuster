@@ -14,3 +14,4 @@ ng add @angular/material
 ng generate component board --display-block
 ng generate component boardSpot --display-block
 ng generate component game --display-block
+ng generate class \board\boardState
