@@ -1,3 +1,11 @@
 :host {
-  display: block;
+  max-width: 95%;
+  max-height: 95%;
+  border: solid red 1px;
+  display: grid;
+  --grid-column-width: 80px;
+  --grid-row-height: 80px;
+  grid-template-columns: repeat(0, var(--grid-column-width, 0));
+  grid-template-rows: repeat(0, var(--grid-row-height, 0));
+  gap: 1px;
 }

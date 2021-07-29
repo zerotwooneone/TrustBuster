@@ -12,3 +12,4 @@ ng add @angular/pwa
 ng add @angular/material
 
 ng generate component board --display-block
+ng generate component boardSpot --display-block
