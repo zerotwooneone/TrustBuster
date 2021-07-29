@@ -10,6 +10,8 @@ import { BoardComponent } from './board/board.component';
 import { BoardSpotComponent } from './board-spot/board-spot.component';
 import { GameComponent } from './game/game.component';
 import { PlayerComponent } from './player/player.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatBadgeModule } from '@angular/material/badge';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import { PlayerComponent } from './player/player.component';
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000'
     }),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatIconModule,
+    MatBadgeModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
