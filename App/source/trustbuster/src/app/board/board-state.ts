@@ -11,21 +11,54 @@ export class BoardState {
 
     constructor() {
         //todo: get real data
-        this._spots = Array.from(Array(this.rowCount * this.columnCount).keys()).map(i => {
+        const user = this.createPlayer(true);
+        const otherPlayers = Array.from(Array(Math.floor(Math.random() * 1) + 1)).map(i => {
+            return this.createPlayer();
+        });
+        const players = [user, ...otherPlayers];
+        const spotIndexes = Array.from(Array(this.rowCount * this.columnCount).keys());
+        this._spots = spotIndexes.map(i => {
             const rowIndex = Math.floor(i / this.columnCount);
             const columnIndex = i % this.columnCount;
-            const playerId = this.makeid(12);
 
-            const randApMax = 3
-            const ap = Math.floor(Math.random() * randApMax) + Math.floor(Math.random() * 2);
-
-            const hp = 1 + Math.floor(Math.random() * 2);
-
-            const player = Math.floor((Math.random() * this.rowCount * this.columnCount)) < 2
-                ? new PlayerState(playerId, ap, hp)
+            const randomPick = (Math.floor((Math.random() * this.rowCount * this.columnCount)) < 2);
+            const runningOutOfSpace: boolean = !!players.length && ((spotIndexes.length - i) <= players.length);
+            if (runningOutOfSpace) {
+                console.warn(`ran out of space players:${players.length} currentSpot:${i}`)
+            }
+            const player = (randomPick || runningOutOfSpace)
+                ? this.getRandomPlayer(players)
                 : null;
+
             return new SpotState(i, rowIndex, columnIndex, player);
         });
+    }
+    getRandomPlayer(players: PlayerState[]): PlayerState {
+        if (players.length === 1) {
+            const player = players[0];
+            players.length = 0;
+            return player;
+        }
+        const toRemoveIndex = Math.floor(Math.random() * players.length);
+        const player = players[toRemoveIndex];
+        players.splice(toRemoveIndex, 1);
+        return player;
+    }
+
+    private createPlayer(isUser: boolean = false): PlayerState {
+        const playerId = this.makeid(12);
+
+        const randApMax = 3;
+        const ap = Math.floor(Math.random() * randApMax) + Math.floor(Math.random() * 2);
+
+        const hp = 1 + Math.floor(Math.random() * 2);
+
+        const player = //Math.floor((Math.random() * this.rowCount * this.columnCount)) < 2
+            //? 
+            new PlayerState(playerId, ap, hp, isUser)
+            //: null
+            ;
+        return player;
     }
 
     private makeid(length: number) {
