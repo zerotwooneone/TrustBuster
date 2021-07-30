@@ -45,10 +45,13 @@ export class BoardComponent implements OnInit {
           return;
         }
 
-        from.removePlayer();
-        if (player) {
-          to.addPlayer(player);
+        const moveCount = this.getMoveCount(from, to);
+        if (moveCount > player.ap) {
+          return;
         }
+
+        from.removePlayer();
+        to.addPlayer(player);
       }
     }
   }
@@ -67,17 +70,18 @@ export class BoardComponent implements OnInit {
       // }
       if (event.container?.data) {
         const to = event.container.data;
-        if (!to.canAddPlayer()) {
-          return;
-        }
-        const dx = Math.max(from.columnIndex, to.columnIndex) - Math.min(from.columnIndex, to.columnIndex);
-        const dy = Math.max(from.rowIndex, to.rowIndex) - Math.min(from.rowIndex, to.rowIndex);
-
-        const moveCount = Math.floor(Math.sqrt(dx * dx + dy * dy));
+        const moveCount = this.getMoveCount(from, to);
 
         player.onHover(moveCount);
       }
     }
   }
 
+
+  private getMoveCount(from: SpotState, to: SpotState) {
+    const dx = Math.max(from.columnIndex, to.columnIndex) - Math.min(from.columnIndex, to.columnIndex);
+    const dy = Math.max(from.rowIndex, to.rowIndex) - Math.min(from.rowIndex, to.rowIndex);
+
+    return Math.max(dx, dy);
+  }
 }

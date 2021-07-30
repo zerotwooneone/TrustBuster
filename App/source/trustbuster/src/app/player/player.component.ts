@@ -18,8 +18,10 @@ export class PlayerComponent implements OnInit {
 
   ngOnInit(): void {
     this.backgroundColor = this.stringToColour(this.state.id);
+
+    //todo: make this work. show ap cost while moving
     this.getAp = this.state.movingAp.pipe(map(v => {
-      console.log(`r:${v == null ? this.state.ap : v} v:${v} ap:${this.state.ap}`);
+      //console.log(`r:${v == null ? this.state.ap : v} v:${v} ap:${this.state.ap}`);
       return v == null ? this.state.ap : v;
     }),
       shareReplay(1));
