@@ -12,4 +12,18 @@ export class SpotState {
         player: PlayerState | null = null) {
         this._player = player;
     }
+    removePlayer(): PlayerState | null {
+        const player = this._player;
+        this._player = null;
+        return player;
+    }
+    addPlayer(player: PlayerState) {
+        if (!this.canAddPlayer()) {
+            throw new Error(`cannot add player ${player.id} because ${this._player?.id} already here.`);
+        }
+        this._player = player;
+    }
+    canAddPlayer(): boolean {
+        return !this._player;
+    }
 }

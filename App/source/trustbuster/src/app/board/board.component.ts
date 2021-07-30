@@ -31,11 +31,29 @@ export class BoardComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<SpotState>) {
-    console.log(event);
+    if (event.item?.dropContainer?.data) {
+      const from = event.item.dropContainer.data as SpotState;
+      // if (!from.canRemovePlayer()) {
+      //   console.warn(`cannot remove player from:${from.rowIndex},${from.columnIndex}`);
+      //   return;
+      // }
+      if (event.container?.data) {
+        const to = event.container.data;
+        if (!to.canAddPlayer()) {
+          console.warn(`cannot add player to:${to.rowIndex},${to.columnIndex}`);
+          return;
+        }
+
+        const player = from.removePlayer();
+        if (player) {
+          to.addPlayer(player);
+        }
+      }
+    }
   }
 
   enter(event: CdkDragEnter<SpotState>) {
-    console.log(`moving from:${event.item?.dropContainer?.data?.rowIndex},${event.item?.dropContainer?.data?.columnIndex} to:${event.container?.data?.rowIndex},${event.container?.data?.columnIndex}`);
+    console.log(`enter from:${event.item?.dropContainer?.data?.rowIndex},${event.item?.dropContainer?.data?.columnIndex} to:${event.container?.data?.rowIndex},${event.container?.data?.columnIndex}`);
     console.warn(event);
   }
 
