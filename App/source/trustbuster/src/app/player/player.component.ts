@@ -1,4 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { from, Observable, Subject } from 'rxjs';
+import { map, shareReplay } from 'rxjs/operators';
 import { PlayerState } from './player-state';
 
 @Component({
@@ -9,12 +11,18 @@ import { PlayerState } from './player-state';
 export class PlayerComponent implements OnInit {
 
   public backgroundColor: string = 'initial';
+  getAp: Observable<number> | null = null;
   @Input() state: PlayerState = null as any;
 
   constructor() { }
 
   ngOnInit(): void {
     this.backgroundColor = this.stringToColour(this.state.id);
+    this.getAp = this.state.movingAp.pipe(map(v => {
+      console.log(`r:${v == null ? this.state.ap : v} v:${v} ap:${this.state.ap}`);
+      return v == null ? this.state.ap : v;
+    }),
+      shareReplay(1));
   }
 
   private stringToColour(str: string): string {

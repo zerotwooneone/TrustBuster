@@ -8,7 +8,7 @@
         </span>
     </div>
     <div>
-        <mat-icon aria-hidden="false" aria-label="ap" [matBadge]="state.ap" matBadgeOverlap="false" matBadgeSize="large"
+        <mat-icon aria-hidden="false" aria-label="ap" [matBadge]="getAp|async" matBadgeOverlap="false" matBadgeSize="large"
             matBadgeColor="warn">stars</mat-icon>
         <span class="cdk-visually-hidden">
             Ap {{state.ap}}

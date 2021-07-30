@@ -16,8 +16,6 @@ export class BoardComponent implements OnInit {
 
   @Input() state: BoardState = null as any;
 
-  public spots: SpotState[] = [];
-
   constructor() {
 
   }
@@ -26,13 +24,17 @@ export class BoardComponent implements OnInit {
     this.columns = `repeat(${this.state.columnCount}, var(--grid-column-width, 0))`;
 
     this.rows = `repeat(${this.state.rowCount}, var(--grid-row-height, 0))`;
-
-    this.spots = this.state.spots;
   }
 
   drop(event: CdkDragDrop<SpotState>) {
     if (event.item?.dropContainer?.data) {
       const from = event.item.dropContainer.data as SpotState;
+      const player = from.player;
+      if (!player) {
+        return;
+      }
+      player.onDropped();
+      from.onPlayerDropped();
       // if (!from.canRemovePlayer()) {
       //   console.warn(`cannot remove player from:${from.rowIndex},${from.columnIndex}`);
       //   return;
@@ -40,11 +42,10 @@ export class BoardComponent implements OnInit {
       if (event.container?.data) {
         const to = event.container.data;
         if (!to.canAddPlayer()) {
-          console.warn(`cannot add player to:${to.rowIndex},${to.columnIndex}`);
           return;
         }
 
-        const player = from.removePlayer();
+        from.removePlayer();
         if (player) {
           to.addPlayer(player);
         }
@@ -53,8 +54,30 @@ export class BoardComponent implements OnInit {
   }
 
   enter(event: CdkDragEnter<SpotState>) {
-    console.log(`enter from:${event.item?.dropContainer?.data?.rowIndex},${event.item?.dropContainer?.data?.columnIndex} to:${event.container?.data?.rowIndex},${event.container?.data?.columnIndex}`);
-    console.warn(event);
+    if (event.item?.dropContainer?.data) {
+      const from = event.item.dropContainer.data as SpotState;
+      const player = from.player;
+      if (!player) {
+        return;
+      }
+      from.onPlayerDragged();
+      // if (!from.canRemovePlayer()) {
+      //   console.warn(`cannot remove player from:${from.rowIndex},${from.columnIndex}`);
+      //   return;
+      // }
+      if (event.container?.data) {
+        const to = event.container.data;
+        if (!to.canAddPlayer()) {
+          return;
+        }
+        const dx = Math.max(from.columnIndex, to.columnIndex) - Math.min(from.columnIndex, to.columnIndex);
+        const dy = Math.max(from.rowIndex, to.rowIndex) - Math.min(from.rowIndex, to.rowIndex);
+
+        const moveCount = Math.floor(Math.sqrt(dx * dx + dy * dy));
+
+        player.onHover(moveCount);
+      }
+    }
   }
 
 }

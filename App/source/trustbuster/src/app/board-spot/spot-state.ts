@@ -5,12 +5,17 @@ export class SpotState {
     public get player(): PlayerState | null {
         return this._player;
     }
+    private _isUserOrigin: boolean;
+    public get isUserOrigin(): boolean {
+        return this._isUserOrigin;
+    }
     constructor(
         readonly id: number,
         readonly rowIndex: number,
         readonly columnIndex: number,
         player: PlayerState | null = null) {
         this._player = player;
+        this._isUserOrigin = false;
     }
     removePlayer(): PlayerState | null {
         const player = this._player;
@@ -25,5 +30,11 @@ export class SpotState {
     }
     canAddPlayer(): boolean {
         return !this._player;
+    }
+    onPlayerDragged() {
+        this._isUserOrigin = true;
+    }
+    onPlayerDropped() {
+        this._isUserOrigin = false;
     }
 }
