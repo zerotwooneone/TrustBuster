@@ -1,14 +1,18 @@
-<div>
-    <mat-icon aria-hidden="false" aria-label="hp" [matBadge]="state.hp" matBadgeOverlap="false" matBadgeSize="large">
-        favorite</mat-icon>
-    <span class="cdk-visually-hidden">
-        Hp {{state.hp}}
-    </span>
-</div>
-<div>
-    <mat-icon aria-hidden="false" aria-label="ap" [matBadge]="state.ap" matBadgeOverlap="false" matBadgeSize="large"
-        matBadgeColor="warn">stars</mat-icon>
-    <span class="cdk-visually-hidden">
-        Ap {{state.ap}}
-    </span>
+<div [ngClass]="{'is-user': state.isUser}" class="border-wrapper">
+    <div [ngStyle]="{'background-color': backgroundColor}" class="container">
+    <div>
+        <mat-icon aria-hidden="false" aria-label="hp" [matBadge]="state.hp" matBadgeOverlap="false" matBadgeSize="large">
+            favorite</mat-icon>
+        <span class="cdk-visually-hidden">
+            Hp {{state.hp}}
+        </span>
+    </div>
+    <div>
+        <mat-icon aria-hidden="false" aria-label="ap" [matBadge]="state.ap" matBadgeOverlap="false" matBadgeSize="large"
+            matBadgeColor="warn">stars</mat-icon>
+        <span class="cdk-visually-hidden">
+            Ap {{state.ap}}
+        </span>
+    </div>
+    </div>
 </div>

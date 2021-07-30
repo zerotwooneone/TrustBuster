@@ -1,4 +1,4 @@
-import { Component, HostBinding, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { PlayerState } from './player-state';
 
 @Component({
@@ -8,7 +8,7 @@ import { PlayerState } from './player-state';
 })
 export class PlayerComponent implements OnInit {
 
-  @HostBinding('style.background-color') backgroundColor: string = '';
+  public backgroundColor: string = 'initial';
   @Input() state: PlayerState = null as any;
 
   constructor() { }
