@@ -12,7 +12,7 @@ export class BoardState {
     constructor() {
         //todo: get real data
         const user = this.createPlayer(true);
-        const otherPlayers = Array.from(Array(Math.floor(Math.random() * 1) + 1)).map(i => {
+        const otherPlayers = Array.from(Array(Math.floor(Math.random() * 3) + 1)).map(i => {
             return this.createPlayer();
         });
         const players = [user, ...otherPlayers];
