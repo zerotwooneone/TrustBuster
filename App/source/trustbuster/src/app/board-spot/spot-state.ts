@@ -1,4 +1,3 @@
-import { BehaviorSubject, Observable } from "rxjs";
 import { PlayerState } from "../player/player-state";
 
 export class SpotState {
@@ -10,8 +9,8 @@ export class SpotState {
     public get isUserOrigin(): boolean {
         return this._isUserOrigin;
     }
-    private _userCanMove: BehaviorSubject<boolean>;
-    public get userCanMove(): Observable<boolean> {
+    private _userCanMove: boolean;
+    public get userCanMove(): boolean {
         return this._userCanMove;
     }
     constructor(
@@ -21,7 +20,7 @@ export class SpotState {
         player: PlayerState | null = null) {
         this._player = player;
         this._isUserOrigin = false;
-        this._userCanMove = new BehaviorSubject<boolean>(false);
+        this._userCanMove = false;
     }
     public removePlayer(): PlayerState | null {
         const player = this._player;
@@ -44,9 +43,9 @@ export class SpotState {
         this._isUserOrigin = false;
     }
     public clearMove(): void {
-        this._userCanMove.next(false);
+        this._userCanMove = false;
     }
     public addMove(): void {
-        this._userCanMove.next(true);
+        this._userCanMove = true;
     }
 }
