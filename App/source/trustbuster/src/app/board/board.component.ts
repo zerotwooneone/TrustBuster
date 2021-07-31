@@ -33,7 +33,7 @@ export class BoardComponent implements OnInit {
       if (!player) {
         return;
       }
-      //player.onDropped();
+      player.onDropped();
       from.onPlayerDropped();
       // if (!from.canRemovePlayer()) {
       //   console.warn(`cannot remove player from:${from.rowIndex},${from.columnIndex}`);

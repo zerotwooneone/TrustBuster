@@ -17,3 +17,4 @@ ng generate component game --display-block
 ng generate class \board\boardState
 ng g class \board-spot\spotState
 ng g class \player\playerState
+ng g service \player\playerMove
