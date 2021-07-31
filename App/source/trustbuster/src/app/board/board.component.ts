@@ -1,6 +1,6 @@
 import { CdkDragDrop, CdkDragEnter, CdkDragSortEvent } from '@angular/cdk/drag-drop';
 import { Component, HostBinding, Input, OnInit } from '@angular/core';
-import { take } from 'rxjs/operators';
+import { first, take } from 'rxjs/operators';
 import { SpotState } from '../board-spot/spot-state';
 import { PlayerMoveService } from '../player/player-move.service';
 import { BoardState } from './board-state';
@@ -42,7 +42,33 @@ export class BoardComponent implements OnInit {
       if (event.container?.data) {
         const to = event.container.data;
         await this.playerMove.movePlayer(from, to);
+        await this.highlightInMoveRange(to);
       }
+    }
+    return;
+  }
+  async highlightInMoveRange(to: SpotState): Promise<undefined> {
+    if (!to.player) {
+      return;
+    }
+    const player = to.player;
+    const ap = await player.ap.pipe(first()).toPromise();
+
+    const minX = Math.max(to.columnIndex - ap, 0);
+    const maxX = Math.min(to.columnIndex + ap, this.state.columnCount);
+    const minY = Math.max(to.rowIndex - ap, 0);
+    const maxY = Math.min(to.rowIndex + ap, this.state.rowCount);
+
+    for (const spot of this.state.spots) {
+      if (!spot.player &&
+        spot.columnIndex >= minX &&
+        spot.columnIndex <= maxX &&
+        spot.rowIndex >= minY &&
+        spot.rowIndex <= maxY) {
+        spot.addMove();
+        continue;
+      }
+      spot.clearMove();
     }
     return;
   }

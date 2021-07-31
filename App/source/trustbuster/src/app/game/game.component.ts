@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { take } from 'rxjs/operators';
+import { first } from 'rxjs/operators';
 import { SpotState } from '../board-spot/spot-state';
 import { BoardState } from '../board/board-state';
 import { PlayerMoveService } from '../player/player-move.service';
@@ -46,7 +46,7 @@ export class GameComponent implements OnInit {
         continue;
       }
       const otherPlayer = from.player;
-      otherPlayer.ap.pipe(take(1)).subscribe(async ap => {
+      otherPlayer.ap.pipe(first()).subscribe(async ap => {
         if (ap > 0) {
           const to = this.findRandomMove(from, ap);
           if (to) {

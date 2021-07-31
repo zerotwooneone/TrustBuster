@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { take } from 'rxjs/operators';
+import { first } from 'rxjs/operators';
 import { SpotState } from '../board-spot/spot-state';
 
 @Injectable({
@@ -9,7 +9,7 @@ export class PlayerMoveService {
 
   constructor() { }
 
-  public async movePlayer(from: SpotState, to: SpotState) {
+  public async movePlayer(from: SpotState, to: SpotState): Promise<undefined> {
     const player = from.player;
     if (!player) {
       return;
@@ -19,7 +19,7 @@ export class PlayerMoveService {
     }
 
     const moveCount = this.getMoveCount(from, to);
-    const playerAp = await player.ap.pipe(take(1)).toPromise();
+    const playerAp = await player.ap.pipe(first()).toPromise();
     if (moveCount > playerAp) {
       return;
     }
@@ -27,6 +27,7 @@ export class PlayerMoveService {
     from.removePlayer();
     to.addPlayer(player);
     player.onMoved(moveCount);
+    return;
   }
 
   public getMoveCount(from: SpotState, to: SpotState) {

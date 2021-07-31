@@ -1,3 +1,4 @@
+import { BehaviorSubject, Observable } from "rxjs";
 import { PlayerState } from "../player/player-state";
 
 export class SpotState {
@@ -9,6 +10,10 @@ export class SpotState {
     public get isUserOrigin(): boolean {
         return this._isUserOrigin;
     }
+    private _userCanMove: BehaviorSubject<boolean>;
+    public get userCanMove(): Observable<boolean> {
+        return this._userCanMove;
+    }
     constructor(
         readonly id: number,
         readonly rowIndex: number,
@@ -16,25 +21,32 @@ export class SpotState {
         player: PlayerState | null = null) {
         this._player = player;
         this._isUserOrigin = false;
+        this._userCanMove = new BehaviorSubject<boolean>(false);
     }
-    removePlayer(): PlayerState | null {
+    public removePlayer(): PlayerState | null {
         const player = this._player;
         this._player = null;
         return player;
     }
-    addPlayer(player: PlayerState) {
+    public addPlayer(player: PlayerState): void {
         if (!this.canAddPlayer()) {
             throw new Error(`cannot add player ${player.id} because ${this._player?.id} already here.`);
         }
         this._player = player;
     }
-    canAddPlayer(): boolean {
+    public canAddPlayer(): boolean {
         return !this._player;
     }
-    onPlayerDragged() {
+    public onPlayerDragged(): void {
         this._isUserOrigin = true;
     }
-    onPlayerDropped() {
+    public onPlayerDropped(): void {
         this._isUserOrigin = false;
+    }
+    public clearMove(): void {
+        this._userCanMove.next(false);
+    }
+    public addMove(): void {
+        this._userCanMove.next(true);
     }
 }
