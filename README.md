@@ -18,3 +18,4 @@ ng generate class \board\boardState
 ng g class \board-spot\spotState
 ng g class \player\playerState
 ng g service \player\playerMove
+ng g component \player\targetAction

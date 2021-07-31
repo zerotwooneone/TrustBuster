@@ -14,6 +14,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatBadgeModule } from '@angular/material/badge';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatButtonModule } from '@angular/material/button';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { TargetActionComponent } from './player/target-action/target-action.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,8 @@ import { MatButtonModule } from '@angular/material/button';
     BoardComponent,
     BoardSpotComponent,
     GameComponent,
-    PlayerComponent
+    PlayerComponent,
+    TargetActionComponent
   ],
   imports: [
     BrowserModule,
@@ -37,6 +40,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatBadgeModule,
     DragDropModule,
     MatButtonModule,
+    MatBottomSheetModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

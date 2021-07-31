@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { combineLatest, from, Observable, Subject } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { PlayerState } from './player-state';
@@ -14,7 +15,7 @@ export class PlayerComponent implements OnInit {
   displayAp: Observable<number> | null = null;
   @Input() state: PlayerState = null as any;
 
-  constructor() { }
+  constructor(private readonly bottomSheet: MatBottomSheet) { }
 
   ngOnInit(): void {
     this.backgroundColor = this.stringToColour(this.state.id);
