@@ -54,6 +54,7 @@ export class BoardComponent implements OnInit {
 
         from.removePlayer();
         to.addPlayer(player);
+        player.onMoved(moveCount);
       }
     }
     return;
