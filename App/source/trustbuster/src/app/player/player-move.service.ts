@@ -9,7 +9,7 @@ export class PlayerMoveService {
 
   constructor() { }
 
-  public async movePlayer(from: SpotState, to: SpotState): Promise<undefined> {
+  public async movePlayer(from: SpotState, to: SpotState): Promise<void> {
     const player = from.player;
     if (!player) {
       return;
@@ -27,7 +27,6 @@ export class PlayerMoveService {
     from.removePlayer();
     to.addPlayer(player);
     player.onMoved(moveCount);
-    return;
   }
 
   public getMoveCount(from: SpotState, to: SpotState) {
