@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { combineLatest, from, Observable, Subject } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { PlayerState } from './player-state';
+import { PlayerService } from './player.service';
 
 @Component({
   selector: 'tb-player',
@@ -15,10 +15,10 @@ export class PlayerComponent implements OnInit {
   displayAp: Observable<number> | null = null;
   @Input() state: PlayerState = null as any;
 
-  constructor(private readonly bottomSheet: MatBottomSheet) { }
+  constructor(private readonly playerService: PlayerService) { }
 
   ngOnInit(): void {
-    this.backgroundColor = this.stringToColour(this.state.id);
+    this.backgroundColor = this.playerService.idToColour(this.state.id);
 
     //todo: make this work. show ap cost while moving
 
@@ -35,18 +35,4 @@ export class PlayerComponent implements OnInit {
     }),
       shareReplay(1));
   }
-
-  private stringToColour(str: string): string {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    var colour = '#';
-    for (let i = 0; i < 3; i++) {
-      var value = (hash >> (i * 8)) & 0xFF;
-      colour += ('00' + value.toString(16)).substr(-2);
-    }
-    return colour;
-  }
-
 }

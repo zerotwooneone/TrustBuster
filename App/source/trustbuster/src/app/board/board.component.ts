@@ -58,7 +58,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     return { found: false };
   }
 
-  async drop(event: CdkDragDrop<SpotState>): Promise<void> {
+  public async drop(event: CdkDragDrop<SpotState>): Promise<void> {
     if (event.item?.dropContainer?.data) {
       const from = event.item.dropContainer.data as SpotState;
       const player = from.player;
@@ -77,7 +77,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       }
     }
   }
-  async highlightInMoveRange(to: SpotState): Promise<void> {
+  private async highlightInMoveRange(to: SpotState): Promise<void> {
     if (!to.player) {
       return;
     }
@@ -103,7 +103,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
 
-  enter(event: CdkDragEnter<SpotState>) {
+  public enter(event: CdkDragEnter<SpotState>): void {
     if (event.item?.dropContainer?.data) {
       const from = event.item.dropContainer.data as SpotState;
       const player = from.player;
@@ -123,7 +123,5 @@ export class BoardComponent implements OnInit, OnDestroy {
       }
     }
   }
-
-
 
 }

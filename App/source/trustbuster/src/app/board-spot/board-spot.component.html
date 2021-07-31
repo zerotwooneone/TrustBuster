@@ -1,4 +1,4 @@
-<div class="container" [ngClass]="{'userCanMove': spot.userCanMove}">
+<div class="container" [ngClass]="{'userCanMove': spot.userCanMove}" (click)="onClick()">
     <!-- <div>{{spot.rowIndex}},{{spot.columnIndex}}</div> -->
     <tb-player *ngIf="spot.player" [state]="spot.player" cdkDrag [cdkDragDisabled]="!spot.player.isUser"
         cdkDragBoundary="tb-board">
