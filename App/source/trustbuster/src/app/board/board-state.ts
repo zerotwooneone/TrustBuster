@@ -9,12 +9,9 @@ export class BoardState {
         return this._spots;
     }
 
-    constructor() {
+    constructor(user: PlayerState,
+        otherPlayers: readonly PlayerState[]) {
         //todo: get real data
-        const user = this.createPlayer(true);
-        const otherPlayers = Array.from(Array(Math.floor(Math.random() * 3) + 1)).map(i => {
-            return this.createPlayer();
-        });
         const players = [user, ...otherPlayers];
         const spotIndexes = Array.from(Array(this.rowCount * this.columnCount).keys());
         this._spots = spotIndexes.map(i => {
@@ -45,32 +42,6 @@ export class BoardState {
         return player;
     }
 
-    private createPlayer(isUser: boolean = false): PlayerState {
-        const playerId = this.makeid(12);
-
-        const randApMax = 3;
-        const ap = Math.floor(Math.random() * randApMax) + Math.floor(Math.random() * 2);
-
-        const hp = 1 + Math.floor(Math.random() * 2);
-
-        const player = //Math.floor((Math.random() * this.rowCount * this.columnCount)) < 2
-            //? 
-            new PlayerState(playerId, ap, hp, isUser)
-            //: null
-            ;
-        return player;
-    }
-
-    private makeid(length: number) {
-        let result = '';
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        const charactersLength = characters.length;
-        for (let i = 0; i < length; i++) {
-            result += characters.charAt(Math.floor(Math.random() *
-                charactersLength));
-        }
-        return result;
-    }
     onAddActionPoint() {
         //todo: improve this
         for (const spot of this._spots) {

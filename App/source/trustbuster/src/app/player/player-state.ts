@@ -35,7 +35,6 @@ export class PlayerState {
     }
     addActionPoint() {
         this._ap.next(this._ap.value + 1);
-        console.log(`id:${this.id} ap:${this._ap.value}`)
     }
     onMoved(moveCount: number) {
         this._ap.next(this._ap.value - moveCount);
