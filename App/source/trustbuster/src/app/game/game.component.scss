@@ -2,9 +2,14 @@
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
+  justify-content: center;
+  height: 100%;
   .container {
     max-width: 95%;
     max-height: 95%;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
   }
   .debug {
     background-color: gray;
