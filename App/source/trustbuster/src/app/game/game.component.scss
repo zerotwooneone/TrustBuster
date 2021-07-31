@@ -6,4 +6,15 @@
     max-width: 95%;
     max-height: 95%;
   }
+  .debug {
+    background-color: gray;
+    padding: 5px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-items: center;
+  }
 }

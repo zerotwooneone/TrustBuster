@@ -1,5 +1,6 @@
 import { CdkDragDrop, CdkDragEnter, CdkDragSortEvent } from '@angular/cdk/drag-drop';
 import { Component, HostBinding, Input, OnInit } from '@angular/core';
+import { take } from 'rxjs/operators';
 import { SpotState } from '../board-spot/spot-state';
 import { BoardState } from './board-state';
 
@@ -26,7 +27,7 @@ export class BoardComponent implements OnInit {
     this.rows = `repeat(${this.state.rowCount}, var(--grid-row-height, 0))`;
   }
 
-  drop(event: CdkDragDrop<SpotState>) {
+  async drop(event: CdkDragDrop<SpotState>): Promise<undefined> {
     if (event.item?.dropContainer?.data) {
       const from = event.item.dropContainer.data as SpotState;
       const player = from.player;
@@ -46,7 +47,8 @@ export class BoardComponent implements OnInit {
         }
 
         const moveCount = this.getMoveCount(from, to);
-        if (moveCount > player.ap) {
+        const playerAp = await player.ap.pipe(take(1)).toPromise();
+        if (moveCount > playerAp) {
           return;
         }
 
@@ -54,6 +56,7 @@ export class BoardComponent implements OnInit {
         to.addPlayer(player);
       }
     }
+    return;
   }
 
   enter(event: CdkDragEnter<SpotState>) {

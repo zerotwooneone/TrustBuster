@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { from, Observable, Subject } from 'rxjs';
+import { combineLatest, from, Observable, Subject } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { PlayerState } from './player-state';
 
@@ -11,7 +11,7 @@ import { PlayerState } from './player-state';
 export class PlayerComponent implements OnInit {
 
   public backgroundColor: string = 'initial';
-  getAp: Observable<number> | null = null;
+  displayAp: Observable<number> | null = null;
   @Input() state: PlayerState = null as any;
 
   constructor() { }
@@ -20,7 +20,15 @@ export class PlayerComponent implements OnInit {
     this.backgroundColor = this.stringToColour(this.state.id);
 
     //todo: make this work. show ap cost while moving
-    this.getAp = this.state.movingAp.pipe(map(v => {
+
+    this.displayAp = combineLatest([this.state.movingAp, this.state.ap]).pipe(
+      map(both => {
+        const movingAp = both[0];
+        const ap = both[1];
+        return movingAp == null ? ap : movingAp;
+      }));
+
+    this.state.movingAp.pipe(map(v => {
       //console.log(`r:${v == null ? this.state.ap : v} v:${v} ap:${this.state.ap}`);
       return v == null ? this.state.ap : v;
     }),

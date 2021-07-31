@@ -17,4 +17,8 @@ export class GameComponent implements OnInit {
     this.boardState = new BoardState();
   }
 
+  onAddActionPoint() {
+    this.boardState.onAddActionPoint();
+  }
+
 }

@@ -71,4 +71,12 @@ export class BoardState {
         }
         return result;
     }
+    onAddActionPoint() {
+        //todo: improve this
+        for (const spot of this._spots) {
+            if (spot.player) {
+                spot.player.addActionPoint();
+            }
+        }
+    }
 }

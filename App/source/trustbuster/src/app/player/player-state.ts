@@ -5,8 +5,8 @@ export class PlayerState {
     public get hp(): number {
         return this._hp;
     }
-    private _ap: number;
-    public get ap(): number {
+    private _ap: BehaviorSubject<number>;
+    public get ap(): Observable<number> {
         return this._ap;
     }
     private _movingApSubject: BehaviorSubject<number | null>;
@@ -23,14 +23,18 @@ export class PlayerState {
         hp: number = 3,
         isUser: boolean = false) {
         this._hp = hp;
-        this._ap = ap;
+        this._ap = new BehaviorSubject(ap);
         this._movingApSubject = new BehaviorSubject<number | null>(null);
         this._isUser = isUser;
     }
     onHover(moveCount: number) {
-        this._movingApSubject.next(this.ap - moveCount);
+        this._movingApSubject.next(this._ap.value - moveCount);
     }
     onDropped() {
         this._movingApSubject.next(null);
+    }
+    addActionPoint() {
+        this._ap.next(this._ap.value + 1);
+        console.log(`id:${this.id} ap:${this._ap.value}`)
     }
 }
