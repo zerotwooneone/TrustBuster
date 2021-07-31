@@ -1,5 +1,4 @@
 <!-- <div>{{spot.rowIndex}},{{spot.columnIndex}}</div> -->
-<tb-player *ngIf="spot.player" [state]="spot.player" cdkDrag [cdkDragDisabled]="!spot.player.isUser"></tb-player>
-<div *ngIf="spot.isUserOrigin" class="user-origin">
-
-</div>
+<tb-player *ngIf="spot.player" [state]="spot.player" cdkDrag [cdkDragDisabled]="!spot.player.isUser"
+    cdkDragBoundary="tb-board"></tb-player>
+<div *ngIf="spot.isUserOrigin" class="user-origin"></div>
