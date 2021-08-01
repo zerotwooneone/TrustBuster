@@ -16,6 +16,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { TargetActionComponent } from './player/target-action/target-action.component';
+import { MatSliderModule } from '@angular/material/slider';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { TargetActionComponent } from './player/target-action/target-action.comp
     DragDropModule,
     MatButtonModule,
     MatBottomSheetModule,
+    MatSliderModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

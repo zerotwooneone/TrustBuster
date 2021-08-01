@@ -1,6 +1,15 @@
 <h1>
-    <mat-icon aria-hidden="false" aria-label="attack">mediation</mat-icon>
     <span class="target" [ngStyle]="{'background-color': targetColor}"></span>
-    <mat-icon aria-hidden="false" aria-label="questionmark">?</mat-icon>
 </h1>
+<div class="adjust">
+    <mat-icon aria-hidden="false" aria-label="remove ap" class="adjust-button">remove</mat-icon>
+    <mat-icon aria-hidden="false" aria-label="ap" matBadge="1" matBadgeColor="warn">stars
+    </mat-icon>
+    <mat-icon aria-hidden="false" aria-label="add ap" class="adjust-button">add</mat-icon>
+</div>
+<div class="confirm">
+    <mat-icon aria-hidden="false" aria-label="attack">clear</mat-icon>
+    <mat-slider aria-label="confirm" min="0" max="1" value=".5" step=".01"></mat-slider>
+    <mat-icon aria-hidden="false" aria-label="attack" color="warn">mediation</mat-icon>
+</div>
 

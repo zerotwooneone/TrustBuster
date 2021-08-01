@@ -9,3 +9,21 @@ h1 {
         display: inline-block;
     }
 }
+.confirm, .adjust {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.confirm {
+    margin-top: 20px;
+}
+
+.adjust {
+    margin-top: 40px;
+    .adjust-button {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+}
