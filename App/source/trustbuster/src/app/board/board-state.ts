@@ -44,7 +44,7 @@ export class BoardState {
                 ? this.removeRandomPlayer(playersCopy)
                 : null;
 
-            const spot = new SpotState(i, rowIndex, columnIndex, player);
+            const spot = new SpotState(i, rowIndex, columnIndex, this._user, player);
             return spot;
         });
     }

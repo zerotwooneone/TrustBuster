@@ -1,15 +1,23 @@
 <h1>
     <span class="target" [ngStyle]="{'background-color': targetColor}"></span>
 </h1>
-<div class="adjust">
-    <mat-icon aria-hidden="false" aria-label="remove ap" class="adjust-button">remove</mat-icon>
-    <mat-icon aria-hidden="false" aria-label="ap" matBadge="1" matBadgeColor="warn">stars
-    </mat-icon>
-    <mat-icon aria-hidden="false" aria-label="add ap" class="adjust-button">add</mat-icon>
+<div class="attack">
+    <div class="adjust">
+        <button mat-icon-button aria-label="remove ap" class="adjust-button" (click)="removeAttackAp()"
+            [disabled]="removeAttackDisabled()">
+            <mat-icon>remove</mat-icon>
+        </button>
+        <mat-icon aria-hidden="false" aria-label="ap" [matBadge]="attackAp" matBadgeColor="warn">stars</mat-icon>
+        <button mat-icon-button aria-label="add ap" class="adjust-button" (click)="addAttackAp()"
+            [disabled]="addAttackDisabled()">
+            <mat-icon>add</mat-icon>
+        </button>
+        </div>
+        <div class="confirm">
+        <mat-slider aria-label="confirm" min="0" max="100" step="1" (change)="onConfirmChange($event)" [value]="confirmValue">
+        </mat-slider>
+        <mat-icon aria-hidden="false" aria-label="attack" color="warn">mediation</mat-icon>
+    </div>
 </div>
-<div class="confirm">
-    <mat-icon aria-hidden="false" aria-label="attack">clear</mat-icon>
-    <mat-slider aria-label="confirm" min="0" max="1" value=".5" step=".01"></mat-slider>
-    <mat-icon aria-hidden="false" aria-label="attack" color="warn">mediation</mat-icon>
-</div>
+
 
