@@ -1,4 +1,5 @@
 import { BehaviorSubject, Observable } from "rxjs";
+import { first } from "rxjs/operators";
 
 export class PlayerState {
     private _hp: number;
@@ -27,16 +28,23 @@ export class PlayerState {
         this._movingApSubject = new BehaviorSubject<number | null>(null);
         this._isUser = isUser;
     }
-    onHover(moveCount: number) {
+    public onHover(moveCount: number): void {
         this._movingApSubject.next(this._ap.value - moveCount);
     }
-    onDropped() {
+    public onDropped(): void {
         this._movingApSubject.next(null);
     }
-    addActionPoint() {
+    public addActionPoint(): void {
         this._ap.next(this._ap.value + 1);
     }
-    onMoved(moveCount: number) {
+    public onMoved(moveCount: number): void {
         this._ap.next(this._ap.value - moveCount);
+    }
+    public onAttacked(attackAp: number): void {
+        this._hp = this._hp - attackAp;
+    }
+    public async onUseAp(amount: number): Promise<void> {
+        const ap = await this._ap.pipe(first()).toPromise();
+        this._ap.next(ap - amount);
     }
 }

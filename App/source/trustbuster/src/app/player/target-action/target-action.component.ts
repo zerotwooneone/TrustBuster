@@ -48,7 +48,7 @@ export class TargetActionComponent implements OnInit, OnDestroy {
       this.confirmValue = 0;
       return;
     }
-    this.bottomSheet.dismiss(new TargetActionResult());
+    this.bottomSheet.dismiss(new TargetActionResult(this.attackAp));
   }
 
   public addAttackAp(): void {
