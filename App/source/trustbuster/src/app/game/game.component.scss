@@ -8,7 +8,7 @@
     max-width: 95%;
     max-height: 95%;
     display: flex;
-    flex-flow: column nowrap;
+    flex-flow: row nowrap;
     align-items: center;
   }
   .debug {
@@ -21,5 +21,22 @@
     flex-flow: row nowrap;
     align-items: center;
     justify-items: center;
+  }
+  .killed {
+    border: solid gray 1px;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+
+    mat-icon,
+    .player {
+      margin: 5px;
+    }
+
+    .player {
+      width: 20px;
+      height: 20px;
+    }
   }
 }

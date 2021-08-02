@@ -5,6 +5,7 @@ import { SpotState } from '../board-spot/spot-state';
 import { BoardState } from '../board/board-state';
 import { PlayerMoveService } from '../player/player-move.service';
 import { PlayerState } from '../player/player-state';
+import { PlayerService } from '../player/player.service';
 import { GameService, PlayerKilled } from './game.service';
 
 @Component({
@@ -20,11 +21,13 @@ export class GameComponent implements OnInit, OnDestroy {
   }
   private _otherPlayers: PlayerState[] = [];
   private _user: PlayerState = null as any;
+  public readonly killed: PlayerKilledVM[] = [];
 
   private readonly initSubscriptions: Subscription[] = [];
 
   constructor(private readonly playerMove: PlayerMoveService,
-    private readonly gameService: GameService) { }
+    private readonly gameService: GameService,
+    private readonly playerService: PlayerService) { }
 
   public ngOnInit(): void {
     //todo: get game state
@@ -231,6 +234,12 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   private onPlayerKilled(pk: PlayerKilled): void {
-    console.log(pk);
+    this.killed.push(new PlayerKilledVM(this.playerService.idToColour(pk.playerId)));
+  }
+}
+
+class PlayerKilledVM {
+  constructor(public readonly color: string) {
+
   }
 }

@@ -1,5 +1,9 @@
 <div class="container">
     <tb-board [state]="boardState" cdkDropListGroup></tb-board>
+    <div class="killed" *ngIf="killed.length">
+        <mat-icon aria-hidden="false" aria-label="dead" color="warn">person_remove</mat-icon>
+        <div *ngFor="let kp of killed; let i = index;" class="player" [ngStyle]="{'background-color': kp.color}"></div>
+    </div>
 </div>
 <div class="debug">
     <button mat-button (click)="onAddActionPoint()">Add Action Point</button>
