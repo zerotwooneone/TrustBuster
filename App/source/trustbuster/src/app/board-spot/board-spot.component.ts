@@ -2,6 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatBottomSheet, MatBottomSheetConfig } from '@angular/material/bottom-sheet';
 import { EMPTY, Subscription } from 'rxjs';
 import { first, switchMap } from 'rxjs/operators';
+import { PlayerService } from '../player/player.service';
 import { TargetActionParam } from '../player/target-action/target-action-param';
 import { TargetActionResult } from '../player/target-action/target-action-result';
 import { TargetActionComponent } from '../player/target-action/target-action.component';
@@ -17,7 +18,8 @@ export class BoardSpotComponent implements OnInit, OnDestroy {
   @Input() spot: SpotState = null as any;
   private dismissedSubscription: Subscription | null = null;
 
-  constructor(private readonly bottomSheet: MatBottomSheet) { }
+  constructor(private readonly bottomSheet: MatBottomSheet,
+    private readonly playerService: PlayerService) { }
 
   ngOnInit(): void {
   }
@@ -48,8 +50,7 @@ export class BoardSpotComponent implements OnInit, OnDestroy {
           if (result &&
             this.spot.player &&
             this.spot.player.id === targetPlayerId) {
-            this.spot.player.onAttacked(result.attackAp);
-            return this.spot.user.onUseAp(result.attackAp);
+            return this.playerService.attack(this.spot.user, this.spot.player, result.attackAp);
           }
           return EMPTY;
         })

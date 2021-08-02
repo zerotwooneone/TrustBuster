@@ -18,15 +18,21 @@ export class PlayerState {
     public get isUser(): boolean {
         return this._isUser;
     }
+    private _range: number;
+    public get range(): number {
+        return this._range;
+    }
     constructor(
         readonly id: string,
         ap: number = 1,
         hp: number = 3,
-        isUser: boolean = false) {
+        isUser: boolean = false,
+        range: number = 3) {
         this._hp = hp;
         this._ap = new BehaviorSubject(ap);
         this._movingApSubject = new BehaviorSubject<number | null>(null);
         this._isUser = isUser;
+        this._range = range;
     }
     public onHover(moveCount: number): void {
         this._movingApSubject.next(this._ap.value - moveCount);
