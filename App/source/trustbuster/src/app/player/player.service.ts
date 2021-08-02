@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { first } from 'rxjs/operators';
+import { BusService } from '../bus/bus.service';
+import { PlayerKilledEvent } from '../bus/event/player-killed-event';
 import { PlayerState } from './player-state';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PlayerService {
-  constructor() { }
+  constructor(private readonly bus: BusService) { }
 
   public idToColour(str: string): string {
     let hash = 0;
@@ -30,5 +32,8 @@ export class PlayerService {
     }
     target.onAttacked(attackAp);
     await player.onUseAp(attackAp);
+    if (target.hp < 1) {
+      this.bus.publish(PlayerKilledEvent.eventName, new PlayerKilledEvent(target.id));
+    }
   }
 }

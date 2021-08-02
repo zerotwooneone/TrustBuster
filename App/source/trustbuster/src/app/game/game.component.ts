@@ -1,16 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { SpotState } from '../board-spot/spot-state';
 import { BoardState } from '../board/board-state';
 import { PlayerMoveService } from '../player/player-move.service';
 import { PlayerState } from '../player/player-state';
+import { GameService, PlayerKilled } from './game.service';
 
 @Component({
   selector: 'tb-game',
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss']
 })
-export class GameComponent implements OnInit {
+export class GameComponent implements OnInit, OnDestroy {
 
   private _boardState: BoardState = null as any;
   public get boardState(): BoardState {
@@ -19,22 +21,37 @@ export class GameComponent implements OnInit {
   private _otherPlayers: PlayerState[] = [];
   private _user: PlayerState = null as any;
 
-  constructor(private readonly playerMove: PlayerMoveService) { }
+  private readonly initSubscriptions: Subscription[] = [];
 
-  ngOnInit(): void {
+  constructor(private readonly playerMove: PlayerMoveService,
+    private readonly gameService: GameService) { }
+
+  public ngOnInit(): void {
     //todo: get game state
     this._user = this.createPlayer(true);
     this._otherPlayers = Array.from(Array(Math.floor(Math.random() * 3) + 1)).map(i => {
       return this.createPlayer();
     });
     this._boardState = new BoardState(this._user, this._otherPlayers);
+
+    this.initSubscriptions.push(this.gameService.getPlayerKilled().subscribe(pk => this.onPlayerKilled(pk)));
   }
 
-  onAddActionPoint(): void {
+  public ngOnDestroy(): void {
+    for (const subscription of this.initSubscriptions) {
+      try {
+        subscription.unsubscribe();
+      } catch (e) {
+        console.error(`error disposing: ${e}`);
+      }
+    }
+  }
+
+  public onAddActionPoint(): void {
     this.boardState.onAddActionPoint();
   }
 
-  onMoveOthers(): void {
+  public onMoveOthers(): void {
     const spotsWithOtherPlayers = this.boardState.spots.reduce<SpotState[]>((acc, cur) => {
       if (cur.player && !cur.player.isUser) {
         acc.push(cur);
@@ -56,7 +73,7 @@ export class GameComponent implements OnInit {
       })
     }
   }
-  findRandomMove(from: SpotState, ap: number): SpotState | null {
+  public findRandomMove(from: SpotState, ap: number): SpotState | null {
     if (ap < 1) {
       return null;
     }
@@ -169,7 +186,7 @@ export class GameComponent implements OnInit {
     }
     return null;
   }
-  getSpotByRC(columnIndex: number, rowIndex: number): SpotState {
+  public getSpotByRC(columnIndex: number, rowIndex: number): SpotState {
     return this.boardState.spots[(rowIndex * this.boardState.columnCount) + columnIndex];
   }
 
@@ -202,7 +219,7 @@ export class GameComponent implements OnInit {
     return player;
   }
 
-  private makeid(length: number) {
+  private makeid(length: number): string {
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const charactersLength = characters.length;
@@ -213,4 +230,7 @@ export class GameComponent implements OnInit {
     return result;
   }
 
+  private onPlayerKilled(pk: PlayerKilled): void {
+    console.log(pk);
+  }
 }
