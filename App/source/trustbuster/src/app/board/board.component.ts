@@ -90,7 +90,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     const maxY = Math.min(to.rowIndex + ap, this.state.rowCount);
 
     for (const spot of this.state.spots) {
-      if (!spot.player &&
+      if (
         spot.columnIndex >= minX &&
         spot.columnIndex <= maxX &&
         spot.rowIndex >= minY &&
