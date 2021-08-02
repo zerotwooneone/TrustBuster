@@ -49,7 +49,8 @@ export class BoardSpotComponent implements OnInit, OnDestroy {
       userAp < 1) {
       return;
     }
-    const targetPlayerId = this.spot.player.id;
+    const target = this.spot.player;
+    const targetPlayerId = target.id;
     const config = new MatBottomSheetConfig<TargetActionParam>();
     config.data = new TargetActionParam(this.spot);
     const bottomSheet = this.bottomSheet.open<TargetActionComponent, TargetActionParam, TargetActionResult>(
@@ -59,10 +60,12 @@ export class BoardSpotComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap(result => {
           this.dismissedSubscription = null;
+          //the state of the board may have changed since the target-action was opened, recheck everything
           if (result &&
-            this.spot.player &&
-            this.spot.player.id === targetPlayerId) {
-            return this.playerService.attack(this.spot.user, this.spot.player, result.attackAp);
+            target &&
+            target.id === targetPlayerId &&
+            this.spot.user) {
+            return this.playerService.attack(this.spot.user, target, result.attackAp);
           }
           return EMPTY;
         })
