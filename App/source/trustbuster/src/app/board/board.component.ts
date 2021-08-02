@@ -3,8 +3,8 @@ import { Component, HostBinding, Input, OnDestroy, OnInit } from '@angular/core'
 import { Subscription } from 'rxjs';
 import { filter, first, map, switchMap } from 'rxjs/operators';
 import { SpotState } from '../board-spot/spot-state';
-import { PlayerMoveService } from '../player/player-move.service';
 import { BoardState } from './board-state';
+import { BoardService } from './board.service';
 
 @Component({
   selector: 'tb-board',
@@ -20,7 +20,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   @Input() state: BoardState = null as any;
   private apSubscription: Subscription | null = null;
 
-  constructor(private readonly playerMove: PlayerMoveService) { }
+  constructor(private readonly boardService: BoardService) { }
 
   async ngOnInit(): Promise<void> {
     this.columns = `repeat(${this.state.columnCount}, var(--grid-column-width, 0))`;
@@ -73,7 +73,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       // }
       if (event.container?.data) {
         const to = event.container.data;
-        await this.playerMove.movePlayer(from, to);
+        await this.boardService.movePlayer(from, to);
       }
     }
   }
@@ -117,7 +117,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       // }
       if (event.container?.data) {
         const to = event.container.data;
-        const moveCount = this.playerMove.getMoveCount(from, to);
+        const moveCount = this.boardService.getMoveCount(from, to);
 
         player.onHover(moveCount);
       }

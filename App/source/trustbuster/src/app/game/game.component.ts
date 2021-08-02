@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { SpotState } from '../board-spot/spot-state';
 import { BoardState } from '../board/board-state';
-import { PlayerMoveService } from '../player/player-move.service';
+import { BoardService } from '../board/board.service';
 import { PlayerState } from '../player/player-state';
 import { PlayerService } from '../player/player.service';
 import { GameService, PlayerKilled } from './game.service';
@@ -25,7 +25,7 @@ export class GameComponent implements OnInit, OnDestroy {
 
   private readonly initSubscriptions: Subscription[] = [];
 
-  constructor(private readonly playerMove: PlayerMoveService,
+  constructor(private readonly boardService: BoardService,
     private readonly gameService: GameService,
     private readonly playerService: PlayerService) { }
 
@@ -70,7 +70,7 @@ export class GameComponent implements OnInit, OnDestroy {
         if (ap > 0) {
           const to = this.findRandomMove(from, ap);
           if (to) {
-            await this.playerMove.movePlayer(from, to);
+            await this.boardService.movePlayer(from, to);
           }
         }
       })
