@@ -1,6 +1,8 @@
-<h1>
-    <span class="target" [ngStyle]="{'background-color': targetColor}"></span>
-</h1>
+<div class="header">
+    <div class="target" [ngStyle]="{'background-color': target.color}">
+        <mat-icon aria-hidden="false" aria-label="target hp" [matBadge]="target.hp">favorite</mat-icon>
+    </div>
+</div>
 <div class="attack">
     <div class="adjust">
         <button mat-icon-button aria-label="remove ap" class="adjust-button" (click)="removeAttackAp()"

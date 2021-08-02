@@ -14,10 +14,7 @@ import { TargetActionResult } from './target-action-result';
 export class TargetActionComponent implements OnInit, OnDestroy {
 
   public confirmValue: number = 0;
-  private _targetColor: string = "";
-  public get targetColor(): string {
-    return this._targetColor;
-  }
+  public readonly target: Target;
   public attackAp: number = 1;
 
   //todo:why cant we await the user.ap? I think every time we await, another change detection occurs
@@ -25,14 +22,17 @@ export class TargetActionComponent implements OnInit, OnDestroy {
   private userApSubscription: Subscription | null = null;
 
   constructor(private readonly bottomSheet: MatBottomSheetRef<TargetActionComponent, TargetActionResult>,
-    @Inject(MAT_BOTTOM_SHEET_DATA) public readonly param: TargetActionParam,
-    private readonly playerService: PlayerService) { }
+    @Inject(MAT_BOTTOM_SHEET_DATA) private readonly param: TargetActionParam,
+    private readonly playerService: PlayerService) {
+    const targetId = param.spot.player
+      ? param.spot.player.id
+      : "";
+    const targetColor = playerService.idToColour(targetId);
+    const targetHp = param.spot.player?.hp ?? 0;
+    this.target = new Target(targetColor, targetHp);
+  }
 
   ngOnInit(): void {
-    if (this.param.spot.player) {
-      const target = this.param.spot.player;
-      this._targetColor = this.playerService.idToColour(target.id);
-    }
     this.userApSubscription = this.param.spot.user.ap.subscribe(ap => this.userAp = ap);
   }
 
@@ -68,4 +68,8 @@ export class TargetActionComponent implements OnInit, OnDestroy {
     return this.attackAp >= this.userAp;
   }
 
+}
+
+class Target {
+  constructor(public readonly color: string, public hp: number) { }
 }

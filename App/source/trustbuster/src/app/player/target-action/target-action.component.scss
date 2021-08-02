@@ -1,11 +1,11 @@
-h1 {
+.header {
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
     justify-content: center;
     .target{
-        width: 20px;
-        height: 20px;
+        box-sizing: border-box;
+        padding: 15px;
         display: inline-block;
     }
 }
