@@ -60,12 +60,12 @@ export class TargetActionComponent implements OnInit, OnDestroy {
   }
 
   public removeAttackDisabled(): boolean {
-
     return this.attackAp <= 1;
   }
 
   public addAttackDisabled(): boolean {
-    return this.attackAp >= this.userAp;
+    return this.attackAp >= this.userAp ||
+      this.attackAp >= this.target.hp;
   }
 
 }
