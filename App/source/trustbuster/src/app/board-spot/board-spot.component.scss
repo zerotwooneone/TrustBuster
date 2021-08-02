@@ -16,6 +16,10 @@
     background-color: rgba(0,0,255,0.1);
   }
 
+  .container.attackable {
+    border: dashed red 5px;
+  }
+
   .user-origin {
     background-color: yellow;
     border: dotted green 5px;

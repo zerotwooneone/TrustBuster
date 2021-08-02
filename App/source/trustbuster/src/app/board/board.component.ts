@@ -84,21 +84,40 @@ export class BoardComponent implements OnInit, OnDestroy {
     const player = to.player;
     const ap = await player.ap.pipe(first()).toPromise();
 
-    const minX = Math.max(to.columnIndex - ap, 0);
-    const maxX = Math.min(to.columnIndex + ap, this.state.columnCount);
-    const minY = Math.max(to.rowIndex - ap, 0);
-    const maxY = Math.min(to.rowIndex + ap, this.state.rowCount);
+    const minMoveX = Math.max(to.columnIndex - ap, 0);
+    const maxMoveX = Math.min(to.columnIndex + ap, this.state.columnCount);
+    const minMoveY = Math.max(to.rowIndex - ap, 0);
+    const maxMoveY = Math.min(to.rowIndex + ap, this.state.rowCount);
+
+    const range = ap > 0
+      ? player.range
+      : 0;
+
+    const minAttackX = Math.max(to.columnIndex - range, 0);
+    const maxAttackX = Math.min(to.columnIndex + range, this.state.columnCount);
+    const minAttackY = Math.max(to.rowIndex - range, 0);
+    const maxAttackY = Math.min(to.rowIndex + range, this.state.rowCount);
 
     for (const spot of this.state.spots) {
       if (
-        spot.columnIndex >= minX &&
-        spot.columnIndex <= maxX &&
-        spot.rowIndex >= minY &&
-        spot.rowIndex <= maxY) {
+        spot.columnIndex >= minMoveX &&
+        spot.columnIndex <= maxMoveX &&
+        spot.rowIndex >= minMoveY &&
+        spot.rowIndex <= maxMoveY) {
         spot.addMove();
-        continue;
+      } else {
+        spot.clearMove();
       }
-      spot.clearMove();
+      if (spot.player &&
+        spot.player.id !== player.id &&
+        spot.columnIndex >= minAttackX &&
+        spot.columnIndex <= maxAttackX &&
+        spot.rowIndex >= minAttackY &&
+        spot.rowIndex <= maxAttackY) {
+        spot.addAttackable();
+      } else {
+        spot.clearAttackable();
+      }
     }
   }
 

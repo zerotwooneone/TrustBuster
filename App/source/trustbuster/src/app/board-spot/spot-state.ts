@@ -13,6 +13,10 @@ export class SpotState {
     public get userCanMove(): boolean {
         return this._userCanMove;
     }
+    private _attackable: boolean;
+    public get attackable(): boolean {
+        return this._attackable;
+    }
     constructor(
         readonly id: number,
         readonly rowIndex: number,
@@ -22,6 +26,7 @@ export class SpotState {
         this._player = player;
         this._isUserOrigin = false;
         this._userCanMove = false;
+        this._attackable = false;
     }
     public removePlayer(): PlayerState | null {
         const player = this._player;
@@ -48,5 +53,11 @@ export class SpotState {
     }
     public addMove(): void {
         this._userCanMove = true;
+    }
+    public addAttackable(): void {
+        this._attackable = true;
+    }
+    public clearAttackable(): void {
+        this._attackable = false;
     }
 }
