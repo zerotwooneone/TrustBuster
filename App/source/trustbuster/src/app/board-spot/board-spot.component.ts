@@ -2,6 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatBottomSheet, MatBottomSheetConfig } from '@angular/material/bottom-sheet';
 import { EMPTY, Subscription } from 'rxjs';
 import { first, switchMap } from 'rxjs/operators';
+import { BoardService, PlayerKilled } from '../board/board.service';
 import { PlayerService } from '../player/player.service';
 import { TargetActionParam } from '../player/target-action/target-action-param';
 import { TargetActionResult } from '../player/target-action/target-action-result';
@@ -18,15 +19,26 @@ export class BoardSpotComponent implements OnInit, OnDestroy {
   @Input() spot: SpotState = null as any;
   private dismissedSubscription: Subscription | null = null;
 
+  private readonly initSubscriptions: Subscription[] = [];
+
   constructor(private readonly bottomSheet: MatBottomSheet,
-    private readonly playerService: PlayerService) { }
+    private readonly playerService: PlayerService,
+    private readonly boardService: BoardService) { }
 
   ngOnInit(): void {
+    this.initSubscriptions.push(this.boardService.getPlayerKilled().subscribe(pk => this.onPlayerKilled(pk)));
   }
 
   ngOnDestroy(): void {
     if (this.dismissedSubscription) {
       this.dismissedSubscription.unsubscribe();
+    }
+    for (const subscription of this.initSubscriptions) {
+      try {
+        subscription.unsubscribe();
+      } catch (e) {
+        console.error(`error disposing: ${e}`);
+      }
     }
   }
 
@@ -57,6 +69,12 @@ export class BoardSpotComponent implements OnInit, OnDestroy {
       )
       .subscribe();
 
+  }
+
+  private onPlayerKilled(pk: PlayerKilled): void {
+    if (this.spot.player && this.spot.player.id === pk.playerId) {
+      this.spot.removePlayer();
+    }
   }
 
 }
