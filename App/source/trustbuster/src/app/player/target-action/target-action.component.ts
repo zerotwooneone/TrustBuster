@@ -22,39 +22,43 @@ export class TargetActionComponent implements OnInit, OnDestroy {
 
   //todo:why cant we await the user.ap? I think every time we await, another change detection occurs
   private userAp: number = 0;
-  private userApSubscription: Subscription | null = null;
+  private initSubscriptions: Subscription[] = [];
 
   constructor(private readonly bottomSheet: MatBottomSheetRef<TargetActionComponent, TargetActionResult>,
     @Inject(MAT_BOTTOM_SHEET_DATA) private readonly param: TargetActionParam,
     private readonly playerService: PlayerService) {
-    const targetId = param.spot.player
-      ? param.spot.player.id
+    const targetId = param.target
+      ? param.target.id
       : "";
     const targetColor = playerService.idToColour(targetId);
-    const targetHp = param.spot.player?.hp ?? 0;
-    const targetAp = param.spot.player?.ap ?? of(0);
+    const targetHp = param.target?.hp ?? 0;
+    const targetAp = param.target?.ap ?? of(0);
     this.target = new PlayerVm(
       targetColor,
       targetHp,
       targetAp);
 
-    const userId = param.spot.user
-      ? param.spot.user.id
+    const userId = param.user
+      ? param.user.id
       : "";
     const userColor = playerService.idToColour(userId)
     this.user = new PlayerVm(
       userColor,
-      param.spot.user.hp,
-      param.spot.user.ap)
+      param.user.hp,
+      param.user.ap)
   }
 
   ngOnInit(): void {
-    this.userApSubscription = this.param.spot.user.ap.subscribe(ap => this.userAp = ap);
+    this.initSubscriptions.push(this.param.user.ap.subscribe(ap => this.userAp = ap));
   }
 
   ngOnDestroy(): void {
-    if (this.userApSubscription) {
-      this.userApSubscription.unsubscribe();
+    for (const sub of this.initSubscriptions) {
+      try {
+        sub.unsubscribe();
+      } catch (e) {
+        console.error(`trouble unsubscribing`);
+      }
     }
   }
 
@@ -95,7 +99,7 @@ export class TargetActionComponent implements OnInit, OnDestroy {
   }
 
   private setTransferAp() {
-    const userApSnapshot = this.param.spot.user.getAp();
+    const userApSnapshot = this.param.user.getAp();
     if (this.transferAp > userApSnapshot) {
       this.transferAp = userApSnapshot;
     }
@@ -111,17 +115,17 @@ export class TargetActionComponent implements OnInit, OnDestroy {
 
   public addTransferDisabled(): boolean {
     this.setTransferAp();
-    const userApSnapshot = this.param.spot.user.getAp();
+    const userApSnapshot = this.param.user.getAp();
     return this.transferAp >= userApSnapshot;
   }
 
   public afterTransferUserAp(): number {
-    const userApSnapshot = this.param.spot.user.getAp();
+    const userApSnapshot = this.param.user.getAp();
     return userApSnapshot - this.transferAp;
   }
 
   public afterTransferTargetAp(): number {
-    const targetApSnapshot = this.param.spot.player?.getAp() ?? 0;
+    const targetApSnapshot = this.param.target?.getAp() ?? 0;
     return targetApSnapshot + this.transferAp;
   }
 
@@ -135,12 +139,16 @@ export class TargetActionComponent implements OnInit, OnDestroy {
   }
 
   public afterAttackUserAp(): number {
-    const userApSnapshot = this.param.spot.user.getAp();
+    const userApSnapshot = this.param.user.getAp();
     return userApSnapshot - this.attackAp;
   }
 
   public afterAttackTargetHp(): number {
     return this.target.hp - this.attackAp;
+  }
+
+  public get attackDisabled(): boolean {
+    return true; //this.param.isInRange.pipe(map(b => !b));
   }
 
 }

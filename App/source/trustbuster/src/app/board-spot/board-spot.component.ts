@@ -1,8 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatBottomSheet, MatBottomSheetConfig } from '@angular/material/bottom-sheet';
-import { EMPTY, Subscription } from 'rxjs';
-import { first, switchMap } from 'rxjs/operators';
-import { BoardService, PlayerKilled } from '../board/board.service';
+import { concat, of, Subscription } from 'rxjs';
+import { first, map, shareReplay, switchMap } from 'rxjs/operators';
+import { BoardService, PlayerKilled, PlayerMoved, TargetSpot } from '../board/board.service';
+import { PlayerState } from '../player/player-state';
 import { PlayerService } from '../player/player.service';
 import { TargetActionParam } from '../player/target-action/target-action-param';
 import { TargetActionResult } from '../player/target-action/target-action-result';
@@ -17,6 +18,8 @@ import { SpotState } from './spot-state';
 export class BoardSpotComponent implements OnInit, OnDestroy {
 
   @Input() spot: SpotState = null as any;
+  @Input() userSpot: SpotState | null = null;
+  @Input() user: PlayerState = null as any;
   private dismissedSubscription: Subscription | null = null;
 
   private readonly initSubscriptions: Subscription[] = [];
@@ -43,16 +46,26 @@ export class BoardSpotComponent implements OnInit, OnDestroy {
   }
 
   public async onClick(): Promise<void> {
-    const userAp = await this.spot.user.ap.pipe(first()).toPromise();
+    const userAp = await this.user.ap.pipe(first()).toPromise();
     if (!this.spot.player ||
       this.spot.player.isUser ||
-      userAp < 1) {
+      userAp < 1 ||
+      !this.userSpot) {
       return;
     }
     const target = this.spot.player;
     const targetPlayerId = target.id;
     const config = new MatBottomSheetConfig<TargetActionParam>();
-    config.data = new TargetActionParam(this.spot);
+    const targetSpot = concat(
+      of(new TargetSpot(this.spot.rowIndex, this.spot.columnIndex)),
+      this.boardService.trackPlayer(this.spot.player.id).pipe(map(e => new TargetSpot(e.toRow, e.toColumn)))
+    );
+    const targetRc = targetSpot;
+    const isInRange = this.boardService.getInRange(this.userSpot, targetRc, this.spot.rowCount, this.spot.columnCount).pipe(
+      shareReplay(1)
+    );
+
+    config.data = new TargetActionParam(this.user, this.spot.player, isInRange);
     const bottomSheet = this.bottomSheet.open<TargetActionComponent, TargetActionParam, TargetActionResult>(
       TargetActionComponent,
       config);
@@ -63,12 +76,12 @@ export class BoardSpotComponent implements OnInit, OnDestroy {
         if (result &&
           target &&
           target.id === targetPlayerId &&
-          this.spot.user) {
+          this.user) {
           if (result.attackAp != null) {
-            return this.playerService.attack(this.spot.user, target, result.attackAp);
+            return this.playerService.attack(this.user, target, result.attackAp);
           }
           if (result.transferAp != null) {
-            return this.playerService.transfer(this.spot.user, target, result.transferAp);
+            return this.playerService.transfer(this.user, target, result.transferAp);
           }
         }
       });

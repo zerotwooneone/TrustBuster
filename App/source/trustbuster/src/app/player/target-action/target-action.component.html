@@ -19,7 +19,7 @@
     </div>
     <div class="confirm">
         <mat-slider aria-label="confirm attack" min="0" max="100" step="1" (change)="onConfirmAttack($event)"
-            [value]="attackConfirmValue">
+            [value]="attackConfirmValue" [disabled]="attackDisabled">
         </mat-slider>
         <mat-icon aria-hidden="false" aria-label="attack" color="warn">mediation</mat-icon>
     </div>

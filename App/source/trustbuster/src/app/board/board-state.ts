@@ -43,8 +43,7 @@ export class BoardState {
             const player = (randomPick || runningOutOfSpace)
                 ? this.removeRandomPlayer(playersCopy)
                 : null;
-
-            const spot = new SpotState(i, rowIndex, columnIndex, this._user, player);
+            const spot = new SpotState(i, rowIndex, columnIndex, this.rowCount, this.columnCount, player);
             return spot;
         });
     }

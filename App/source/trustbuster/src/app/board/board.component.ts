@@ -3,6 +3,7 @@ import { Component, HostBinding, Input, OnDestroy, OnInit } from '@angular/core'
 import { Subscription } from 'rxjs';
 import { filter, first, map, switchMap } from 'rxjs/operators';
 import { SpotState } from '../board-spot/spot-state';
+import { PlayerState } from '../player/player-state';
 import { BoardState } from './board-state';
 import { BoardService } from './board.service';
 
@@ -18,7 +19,12 @@ export class BoardComponent implements OnInit, OnDestroy {
   @HostBinding('style.--grid-column-width') columnWidth: string = '';
 
   @Input() state: BoardState = null as any;
-  private apSubscription: Subscription | null = null;
+  private readonly initSubscriptions: Subscription[] = [];
+
+  public userSpot: SpotState | null = null;
+  public get user(): PlayerState {
+    return this.state.user;
+  }
 
   constructor(private readonly boardService: BoardService) { }
 
@@ -26,7 +32,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.columns = `repeat(${this.state.columnCount}, var(--grid-column-width, 0))`;
     this.rows = `repeat(${this.state.rowCount}, var(--grid-row-height, 0))`;
 
-    this.apSubscription = this.state.user.ap
+    this.initSubscriptions.push(this.state.user.ap
       .pipe(
         map(ap => this.findPlayerSpotById(this.state.user.id)),
         filter(fr => fr.found),
@@ -40,12 +46,25 @@ export class BoardComponent implements OnInit, OnDestroy {
         switchMap(spot => {
           return this.highlightInMoveRange(spot);
         })
-      ).subscribe();
+    ).subscribe());
+
+    this.initSubscriptions.push(this.boardService.trackPlayer(this.state.user.id).subscribe(playerMoved => {
+      const spot = this.getSpotByRc(playerMoved.toRow, playerMoved.toColumn);
+      this.userSpot = spot;
+    }))
+  }
+  private getSpotByRc(rowIndex: number, columnIndex: number): SpotState {
+    const index = (rowIndex * this.state.columnCount) + columnIndex;
+    return this.state.spots[index];
   }
 
   ngOnDestroy(): void {
-    if (this.apSubscription) {
-      this.apSubscription.unsubscribe();
+    for (const subscription of this.initSubscriptions) {
+      try {
+        subscription.unsubscribe();
+      } catch (e) {
+        console.error(`error disposing: ${e}`);
+      }
     }
   }
 

@@ -21,7 +21,8 @@ export class SpotState {
         readonly id: number,
         readonly rowIndex: number,
         readonly columnIndex: number,
-        readonly user: PlayerState,
+        readonly rowCount: number,
+        readonly columnCount: number,
         player: PlayerState | null = null) {
         this._player = player;
         this._isUserOrigin = false;
