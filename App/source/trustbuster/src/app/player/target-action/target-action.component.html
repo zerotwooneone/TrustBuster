@@ -1,15 +1,17 @@
-<div class="header">
-    <div class="player" [ngStyle]="{'background-color': target.color}">
-        <mat-icon aria-hidden="false" aria-label="target hp" [matBadge]="target.hp">favorite</mat-icon>
-    </div>
-</div>
 <div class="attack">
     <div class="adjust">
         <button mat-icon-button aria-label="remove ap" class="adjust-button" (click)="removeAttackAp()"
             [disabled]="removeAttackDisabled()">
             <mat-icon>remove</mat-icon>
         </button>
-        <mat-icon aria-hidden="false" aria-label="ap" [matBadge]="attackAp" matBadgeColor="warn">stars</mat-icon>
+        <div class="player" [ngStyle]="{'background-color': user.color}">
+            <mat-icon aria-hidden="false" aria-label="user ap" [matBadge]="afterAttackUserAp()">stars</mat-icon>
+        </div>
+        <mat-icon aria-hidden="false" aria-label="attack" color="warn" [matBadge]="attackAp" class="attack-icon">mediation
+        </mat-icon>
+        <div class="player" [ngStyle]="{'background-color': target.color}">
+            <mat-icon aria-hidden="false" aria-label="target hp" [matBadge]="afterAttackTargetHp()">favorite</mat-icon>
+        </div>
         <button mat-icon-button aria-label="add ap" class="adjust-button" (click)="addAttackAp()"
             [disabled]="addAttackDisabled()">
             <mat-icon>add</mat-icon>
@@ -29,11 +31,11 @@
             <mat-icon>remove</mat-icon>
         </button>
         <div class="player" [ngStyle]="{'background-color': user.color}">
-            <mat-icon aria-hidden="false" aria-label="user ap" [matBadge]="afterUserAp()">stars</mat-icon>
+            <mat-icon aria-hidden="false" aria-label="user ap" [matBadge]="afterTransferUserAp()">stars</mat-icon>
         </div>
         <mat-icon aria-hidden="false" aria-label="transfer to">arrow_forward</mat-icon>
         <div class="player" [ngStyle]="{'background-color': target.color}">
-            <mat-icon aria-hidden="false" aria-label="target ap" [matBadge]="afterTargetAp()">stars</mat-icon>
+            <mat-icon aria-hidden="false" aria-label="target ap" [matBadge]="afterTransferTargetAp()">stars</mat-icon>
         </div>
         <button mat-icon-button aria-label="add ap" class="adjust-button" (click)="addTransferAp()"
             [disabled]="addTransferDisabled()">

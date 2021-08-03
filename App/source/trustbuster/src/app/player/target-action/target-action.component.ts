@@ -115,12 +115,12 @@ export class TargetActionComponent implements OnInit, OnDestroy {
     return this.transferAp >= userApSnapshot;
   }
 
-  public afterUserAp(): number {
+  public afterTransferUserAp(): number {
     const userApSnapshot = this.param.spot.user.getAp();
     return userApSnapshot - this.transferAp;
   }
 
-  public afterTargetAp(): number {
+  public afterTransferTargetAp(): number {
     const targetApSnapshot = this.param.spot.player?.getAp() ?? 0;
     return targetApSnapshot + this.transferAp;
   }
@@ -132,6 +132,15 @@ export class TargetActionComponent implements OnInit, OnDestroy {
       return;
     }
     this.bottomSheet.dismiss(new TargetActionResult(null, this.transferAp));
+  }
+
+  public afterAttackUserAp(): number {
+    const userApSnapshot = this.param.spot.user.getAp();
+    return userApSnapshot - this.attackAp;
+  }
+
+  public afterAttackTargetHp(): number {
+    return this.target.hp - this.attackAp;
   }
 
 }
