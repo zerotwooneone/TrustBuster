@@ -10,6 +10,9 @@ export class PlayerState {
     public get ap(): Observable<number> {
         return this._ap;
     }
+    public getAp(): number {
+        return this._ap.value;
+    }
     private _movingApSubject: BehaviorSubject<number | null>;
     public get movingAp(): Observable<number | null> {
         return this._movingApSubject;
@@ -40,8 +43,8 @@ export class PlayerState {
     public onDropped(): void {
         this._movingApSubject.next(null);
     }
-    public addActionPoint(): void {
-        this._ap.next(this._ap.value + 1);
+    public addActionPoint(count: number = 1): void {
+        this._ap.next(this._ap.value + count);
     }
     public onMoved(moveCount: number): void {
         this._ap.next(this._ap.value - moveCount);
@@ -49,8 +52,8 @@ export class PlayerState {
     public onAttacked(attackAp: number): void {
         this._hp = this._hp - attackAp;
     }
-    public async onUseAp(amount: number): Promise<void> {
-        const ap = await this._ap.pipe(first()).toPromise();
+    public onUseAp(amount: number): void {
+        const ap = this._ap.value;
         this._ap.next(ap - amount);
     }
 }

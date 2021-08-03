@@ -22,18 +22,30 @@ export class PlayerService {
     }
     return colour;
   }
-  public async attack(player: PlayerState, target: PlayerState, attackAp: number): Promise<void> {
-    const playerAp = await player.ap.pipe(first()).toPromise();
+  public attack(player: PlayerState, target: PlayerState, attackAp: number): void {
     if (!player || !target || attackAp < 1) {
-      return Promise.reject('argument error trying to attack');
+      return;
     }
+    const playerAp = player.getAp();
     if (playerAp < 1 || (playerAp - attackAp) < 0) {
-      return Promise.reject('not enough ap to attack');
+      throw new Error('not enough ap to attack');
     }
     target.onAttacked(attackAp);
-    await player.onUseAp(attackAp);
+    player.onUseAp(attackAp);
     if (target.hp < 1) {
       this.bus.publish(PlayerKilledEvent.eventName, new PlayerKilledEvent(target.id));
     }
+  }
+
+  public transfer(player: PlayerState, target: PlayerState, transferAp: number): void {
+    if (!player || !target || transferAp < 1) {
+      return;
+    }
+    const playerApSnapshot = player.getAp();
+    if (playerApSnapshot < 1 || (playerApSnapshot - transferAp) < 0) {
+      throw new Error(`not enough ap to transfer`);
+    }
+    player.onUseAp(transferAp);
+    target.addActionPoint(transferAp);
   }
 }

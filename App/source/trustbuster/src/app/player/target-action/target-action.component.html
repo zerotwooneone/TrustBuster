@@ -1,5 +1,5 @@
 <div class="header">
-    <div class="target" [ngStyle]="{'background-color': target.color}">
+    <div class="player" [ngStyle]="{'background-color': target.color}">
         <mat-icon aria-hidden="false" aria-label="target hp" [matBadge]="target.hp">favorite</mat-icon>
     </div>
 </div>
@@ -14,11 +14,37 @@
             [disabled]="addAttackDisabled()">
             <mat-icon>add</mat-icon>
         </button>
-        </div>
-        <div class="confirm">
-        <mat-slider aria-label="confirm" min="0" max="100" step="1" (change)="onConfirmChange($event)" [value]="confirmValue">
+    </div>
+    <div class="confirm">
+        <mat-slider aria-label="confirm attack" min="0" max="100" step="1" (change)="onConfirmAttack($event)"
+            [value]="attackConfirmValue">
         </mat-slider>
         <mat-icon aria-hidden="false" aria-label="attack" color="warn">mediation</mat-icon>
+    </div>
+</div>
+<div class="transfer">
+    <div class="diagram">
+        <button mat-icon-button aria-label="remove ap" class="adjust-button" (click)="removeTransferAp()"
+            [disabled]="removeTransferDisabled()">
+            <mat-icon>remove</mat-icon>
+        </button>
+        <div class="player" [ngStyle]="{'background-color': user.color}">
+            <mat-icon aria-hidden="false" aria-label="user ap" [matBadge]="afterUserAp()">stars</mat-icon>
+        </div>
+        <mat-icon aria-hidden="false" aria-label="transfer to">arrow_forward</mat-icon>
+        <div class="player" [ngStyle]="{'background-color': target.color}">
+            <mat-icon aria-hidden="false" aria-label="target ap" [matBadge]="afterTargetAp()">stars</mat-icon>
+        </div>
+        <button mat-icon-button aria-label="add ap" class="adjust-button" (click)="addTransferAp()"
+            [disabled]="addTransferDisabled()">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+    <div class="confirm">
+        <mat-slider aria-label="confirm transfer" min="0" max="100" step="1" (change)="onConfirmTransfer($event)"
+            [value]="transferConfirmValue">
+        </mat-slider>
+        <mat-icon aria-hidden="false" aria-label="transfer" color="accent">check</mat-icon>
     </div>
 </div>
 

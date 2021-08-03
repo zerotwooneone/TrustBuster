@@ -57,20 +57,21 @@ export class BoardSpotComponent implements OnInit, OnDestroy {
       TargetActionComponent,
       config);
     this.dismissedSubscription = bottomSheet.afterDismissed()
-      .pipe(
-        switchMap(result => {
-          this.dismissedSubscription = null;
-          //the state of the board may have changed since the target-action was opened, recheck everything
-          if (result &&
-            target &&
-            target.id === targetPlayerId &&
-            this.spot.user) {
+      .subscribe(result => {
+        this.dismissedSubscription = null;
+        //the state of the board may have changed since the target-action was opened, recheck everything
+        if (result &&
+          target &&
+          target.id === targetPlayerId &&
+          this.spot.user) {
+          if (result.attackAp != null) {
             return this.playerService.attack(this.spot.user, target, result.attackAp);
           }
-          return EMPTY;
-        })
-      )
-      .subscribe();
+          if (result.transferAp != null) {
+            return this.playerService.transfer(this.spot.user, target, result.transferAp);
+          }
+        }
+      });
 
   }
 

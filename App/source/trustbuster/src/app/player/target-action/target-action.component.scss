@@ -3,29 +3,35 @@
     flex-flow: row nowrap;
     align-items: center;
     justify-content: center;
-    .target{
+}
+.player{
         box-sizing: border-box;
         padding: 15px;
         display: inline-block;
-    }
 }
-.attack {
+.confirm, .adjust {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+}
+.adjust-button {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+.attack,
+.transfer {
     margin: 20px 5px;
     box-sizing: border-box;
     padding: 5px;
     border: solid gray 1px;
     border-radius: 2px;
-    .confirm, .adjust {
+}
+.transfer {
+    .diagram {
         display: flex;
         flex-flow: row nowrap;
         justify-content: center;
         align-items: center;
-    }
-
-    .adjust {
-        .adjust-button {
-            margin-left: 20px;
-            margin-right: 20px;
-        }
     }
 }
